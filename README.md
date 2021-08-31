@@ -1,5 +1,13 @@
-# Travelling Salesman Problem
-An IEEE quantum hackathon project. This project includes a qiskit run-time routine to solve the travelling salesman problem using QAOA. 
+# Travelling Salesman Problem 
+An IEEE quantum hackathon project. This project includes a qiskit run-time routine to solve the travelling salesman problem with 4 nodes using the built-in VQE program.
 
-# Prerequisites to run the program:
+# Overview of Solution
+Throughout our attempt to build this routine, we encountered many errors and made some discoveries. We successfully used the built-in VQEProgram Object from qiskit_optimization.runtime to solve the travelling salesman problem with 3 nodes. This is seen in the [3-node-runtime-vqe.ipnyb](https://github.com/theDe-bugger/IEEE-quantum-hackathon/blob/main/3-node-runtime-vqe.ipynb). We then tried to do the same with 4 nodes for the graph. This worked successfully when we used the local VQE object from qiskit.algorithms as seen in [local-vqe.ipnyb](https://github.com/theDe-bugger/IEEE-quantum-hackathon/blob/main/local-vqe.ipynb). 
 
+# Issues with Qiskit Runtime API and 4 nodes
+The final test, our ultimate objective, was to run the tsp solver solution with 4 nodes through the Qiskit Runtime API. This is where we encountered issues in running the api. When running it through the VQEProgram Object from qiskit_optimization.runtime in local Runtime, the program threw errors mentioning that the amount of max retires were exceeded. This happened due to the high amount of iterations required to run the algorithm with 4 nodes. The iterations could not be reduced due to algorithm limitations. This error is seen in [errors-found.ipnyb](https://github.com/theDe-bugger/IEEE-quantum-hackathon/blob/main/errors-found.ipynb). 
+
+To workaround this, we tested a direct call to the qiskit api on the following server: https://runtime-us-east.quantum-computing.ibm.com/openapi/ . These api calls required JSON format to work. This worked with the built-in "sample-program" but when testing with VQE, the paramaters were different. The VQE call requires an 'ansatz' paramater in the form of a Quantum Circuit and an 'operator' in the form of a PauliSumOp, however, these objects are not JSON serializable as seen in [errors-found.ipnyb](https://github.com/theDe-bugger/IEEE-quantum-hackathon/blob/main/errors-found.ipynb). If there is a solution, we didn't find much documentation related to direct API calls for the vqe program.
+
+# Next Steps + Final Comments
+As young students, new to the industry, we believe we have found some next steps for the Qiskit Runtime API cloud service for improvement and support for applications. Going forward, we would like to build a program which we can upload to the API for others to use as a TSP solution. That way, users only need to input cities/locations required + other constraints, without having to worry about building hamiltonians or algorithms. Once public access has been released for uploading custom programs, we plan to work on this program, bringing quantum computing one step closer to the public, accessibile, applicable stage.
